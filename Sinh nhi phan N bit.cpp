@@ -1,7 +1,7 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-int n, a[100];
+int n, a[100], final = 0;
 
 // ham khoi tao tat ca gia tri = 0;
 void init() 
@@ -24,6 +24,8 @@ bool check()
 	return true;
 }
 
+//ham check nay khong thuc su can thiet, co the goi 1 bien khac
+
 void sinh() 
 {
 	int i = n; // duyet tu cuoi'
@@ -32,14 +34,21 @@ void sinh()
 		a[i] = 0;
 		i--;
 	}
-	a[i] = 1;
+	if(i == 0)
+	{
+		final = 1;
+	}
+	else
+	{
+		a[i] = 1;
+	}
 }
 
 int main() 
 {
 	cin >> n;
 	init();
-	while(!check())
+	while(!final)
 	{
 		for(int i = 1; i <= n; i++) 
 		{
