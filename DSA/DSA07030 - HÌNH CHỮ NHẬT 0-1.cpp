@@ -1,83 +1,78 @@
 #include <bits/stdc++.h>
-using ll = long long;
 using namespace std;
 
-int n, m;
-int a[505][505];
-int x[505][505];
-int y[505][505];
-
-int max_area(int x[])
-{
-    int res = 0;
-    int i = 0;
-    stack<int> st;
-    while(i < m)
-    {
-        if(st.empty() || x[i] >= x[st.top()]) st.push(i++);
-        else
-        {
-            int top = st.top(); st.pop();
-            if(st.empty())
-            {
-                res = max(res, i * x[top]);
-            }
-            else
-            {
-                res = max(res, x[top] * (i - st.top() - 1));
-            }
-        }
-    }
-    while(!st.empty())
-    {
-        int top = st.top(); st.pop();
-            if(st.empty())
-            {
-                res = max(res, i * x[top]);
-            }
-            else
-            {
-                res = max(res, x[top] * (i - st.top() - 1));
-            }
-    }
-    return res;
-}
+int a[1005][1005];
+int l[1005], r[1005];
 
 void solve(){
+    int n, m;
     cin >> n >> m;
-    for(int i = 1; i <= n; i++)
-    {
-        for(int j = 1; j <= m; j++)
-        {
+    for(int i = 0; i < n; i++){
+        for(int j = 0; j < m; j++){
             cin >> a[i][j];
+            if(a[i][j] && i > 0) a[i][j] += a[i-1][j]; 
         }
     }
-    int ans = 0;
-    for(int i = 1; i <= n; i++)
-    {
-        for(int j = 1; j <= m; j++)
-        {
-            if(i == 1) y[i][j] = a[i][j];
-            else if(a[i][j])
-            {
-                y[i][j] = y[i-1][j] + 1;
+    int area = 0;
+    pair<int,int> canh;
+    for(int i = 0; i < n; i++){
+        memset(l,0,sizeof(l));
+        memset(r,0,sizeof(r));
+        stack<int> b,c;
+        for(int j = m - 1; j >= 0; j--){
+            while(!b.empty() && a[i][j] <= a[i][b.top()]) b.pop();
+            if(b.empty()) r[j] = -1;
+            else r[j] = b.top();
+            b.push(j);
+        }
+        for(int j = 0; j < m; j++){
+            while(!c.empty() && a[i][j] <= a[i][c.top()]) c.pop();
+            if(c.empty()) l[j] = -1;
+            else l[j] = c.top();
+            c.push(j);
+        }
+        for(int j = 0; j < m; j++){
+            int tmp = 0;
+            int left, right;
+            if(l[j] == -1){
+                tmp += a[i][j] * (j + 1);
+                left = j + 1;
             }
-            else y[i][j] = 0;
-            // cout << x[i][j] * y[i][j] << "\n";
+            else {
+                tmp += a[i][j] * (j - l[j]);
+                left = j - l[j];
+            }
+            if(r[j] == -1){
+                tmp += a[i][j] * (m - j - 1);
+                right = m - j - 1;
+            }
+            else {
+                tmp += a[i][j] * (r[j] - j - 1);
+                right = r[j] - j - 1;
+            }
+            if(tmp == area){
+                if(abs(canh.first - canh.second) > abs(a[i][j] - (right + left))){
+                    canh = {a[i][j], right + left};
+                }
+            }
+            if(tmp > area){
+                area = tmp;
+                canh = {a[i][j], right + left};
+            }
         }
     }
-    for(int i = 1; i <= n; i++)
-    {
-        ans = max(ans, max_area(y[i]));
-    }
-    cout << ans << "\n";
+    cout << area << '\n';
+    // cout << canh.first << ' ' << canh.second << "\n";
 }
 
-int main()
-{
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL); cout.tie(NULL);
-    int t = 1; 
+int main() {
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+    cout.tie(0);
+    int t = 1;
     cin >> t;
-    while(t--) solve();
+    while (t--) {
+        solve();
+    }
+    return 0;
 }

@@ -22,7 +22,7 @@ void solve()
     stack<char> l,r;
     for(auto x : s)
     {
-        if(x == '<') 
+        if(x == '<')
         {
             if(!l.empty())
             {

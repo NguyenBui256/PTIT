@@ -1,0 +1,6 @@
+name = input()
+dob = input()
+x = float(input())
+y = float(input())
+z = float(input())
+print("%s %s %.1f" % (name, dob, x+y+z))
