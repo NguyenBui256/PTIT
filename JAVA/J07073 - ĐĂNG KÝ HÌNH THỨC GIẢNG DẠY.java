@@ -1,0 +1,67 @@
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
+
+public class Hello {
+    static class MonHoc {
+        String ma, ten, lythuyet, th;
+        int tin;
+
+        @Override
+        public String toString() {
+            return ma + " " + ten + " " + tin + " " + lythuyet + " " + th;
+        }
+    }
+
+
+
+    public static void main(String[] args) throws FileNotFoundException, ParseException {
+        Scanner sc = new Scanner(new File("MONHOC.in"));
+        // Scanner sc = new Scanner(System.in);
+        int t = Integer.parseInt(sc.nextLine());
+        List<MonHoc> ls = new ArrayList<>();
+        for(int i = 1; i<= t; i++) {
+            MonHoc x = new MonHoc();
+            x.ma = sc.nextLine();
+            x.ten = sc.nextLine();
+            x.tin = Integer.parseInt(sc.nextLine());
+            x.lythuyet = sc.nextLine();
+            x.th = sc.nextLine();
+            if(x.th.equals("Truc tuyen") || x.th.contains(".ptit.edu.vn")) {
+                ls.add(x);
+            }
+        }
+        Collections.sort(ls, new Comparator<MonHoc>() {
+            @Override
+            public int compare(MonHoc o1, MonHoc o2) {
+                return o1.ma.compareTo(o2.ma);
+            }
+        });
+        for(MonHoc x : ls) {
+            System.out.println(x);
+        }
+    }
+
+    public static String formatTen(String ten) {
+        String[] s = ten.trim().split("\\s+");
+        String ans = "";
+        for(String x : s) {
+            if(!x.equals(" ")){
+                x = x.substring(0, 1).toUpperCase() + x.substring(1).toLowerCase();
+                ans += x + " ";
+            }
+        }
+//        System.out.println(ans);
+        return ans.trim();
+    };
+
+    public static double diemuutien(String ma) {
+        if(ma.charAt(2) == '1') return 0.5;
+        else if(ma.charAt(2) == '2') return 1.0;
+        return 2.5;
+    }
+}
